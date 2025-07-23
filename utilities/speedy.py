@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from _speedy_qml import (
+from utilities._speedy_qml import (
     cnot_perms,
     had_big,
     had_medium,

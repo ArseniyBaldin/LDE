@@ -1,5 +1,55 @@
 import numpy as np
 
+import matplotlib.pyplot as plt
+
+def plot_clusters(X, y, figsize=(10, 10), title="Cluster Visualization"):
+    """
+    Визуализирует двумерные кластеры с разными цветами и маркерами.
+
+    :param X: np.ndarray shape (n_samples, 2), координаты точек
+    :param y: np.ndarray shape (n_samples,), метки классов
+    :param figsize: tuple, размер графика
+    :param title: str, заголовок
+    """
+    assert X.shape[1] == 2, "Функция поддерживает только 2D-визуализацию"
+
+    # Уникальные метки и палитра
+    classes = np.unique(y)
+    colors = plt.cm.get_cmap("tab10", len(classes))
+    markers = ['o', 's', 'P', 'X', 'D', '^', 'v', '<', '>', '*', 'H', '8', 'p', '+', 'x', '1', '2', '3', '4', '|', '_']
+
+    # Красивые Unicode символы (масти, сердечки и т.п.)
+    unicode_markers = ['$\heartsuit$', '$\spadesuit$', '$\clubsuit$', '$\diamondsuit$', '$\bigstar$', '$\bullet$', '$\checkmark$']
+    full_markers = markers + unicode_markers
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=150)
+
+    for i, cls in enumerate(classes):
+        cls_points = X[y == cls]
+        marker = full_markers[i % len(full_markers)]
+        ax.scatter(cls_points[:, 0], cls_points[:, 1],
+                   label=f"Class {cls}",
+                   color=colors(i),
+                   marker=marker,
+                   edgecolors='k',
+                   s=70,
+                   alpha=0.85)
+
+    # Оформление
+    ax.set_title(title, fontsize=14, pad=12)
+    ax.set_xlabel("X₁", fontsize=12)
+    ax.set_ylabel("X₂", fontsize=12)
+    ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
+
+    # Центр координат и оси
+    ax.axhline(0, color='black', linewidth=1)
+    ax.axvline(0, color='black', linewidth=1)
+
+    ax.legend()
+    ax.set_aspect('equal', adjustable='datalim')
+    plt.tight_layout()
+    plt.show()
+
 def set_axes_equal(ax):
     '''Устанавливает одинаковый масштаб по осям x, y, z'''
     limits = np.array([
